@@ -11,14 +11,15 @@ def scrape_all():
     browser = Browser('chrome', **executable_path, headless=True)
 
     news_title, news_paragraph = mars_news(browser)
-
+    
     # Run all scraping functions and store results in a dictionary
     data = {
         "news_title": news_title,
         "news_paragraph": news_paragraph,
         "featured_image": featured_image(browser),
         "facts": mars_facts(),
-        "last_modified": dt.datetime.now()
+        "last_modified": dt.datetime.now(),
+        "hemisphere_image_url":{}
     }
 
     # Stop webdriver and return data
@@ -94,6 +95,39 @@ def mars_facts():
     # Convert dataframe into HTML format, add bootstrap
     return df.to_html(classes="table table-striped")
 
+def hemi_url():
+    executable_path = {'executable_path': ChromeDriverManager().install()}
+    browser = Browser('chrome', **executable_path, headless=False)
+    url = 'https://marshemispheres.com/'
+
+    browser.visit(url)
+    html = browser.html
+    item_soup =soup (html, 'html.parser')
+    html = browser.html
+    item_soup = soup (html, 'html.parser')
+    hemispheres= {}
+    hemisphere_image_url = []
+    i=0
+    for item in item_soup.find_all('h3'):
+        title = item.text
+
+        open_file = browser.find_by_text(title)[0]
+        if title == 'Back':
+            continue
+        open_file.click()
+        html= browser.html
+        item_soup = soup (html, 'html.parser')
+        image = item_soup.find('img', class_='wide-image').get('src')
+        item_url = f'https://marshemispheres.com/{image}'
+        
+        hemispheres = {'image_url': item_url, 'title':title}
+        hemisphere_image_url.append(hemispheres)
+        
+        html = browser.back()
+        
+        i = i + 1
+    return hemisphere_image_url
+    
 if __name__ == "__main__":
 
     # If running as script, print scraped data
