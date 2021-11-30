@@ -116,7 +116,7 @@ for item in item_soup.find_all('h3'):
     hemisphere_image_url.append(hemispheres)
     
     html = browser.back()
-       
+    hemispheres = {}  
     i = i + 1
 
 # 4. Print the list that holds the dictionary of each image url and title.
