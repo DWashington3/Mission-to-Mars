@@ -41,14 +41,30 @@
           />
         </div>
         <div class="col-md-4">
+
           <!-- Mars Facts -->
           <div class="row" id="mars-facts">
             <h4>Mars Facts</h4>
             {{ mars.facts | safe }}
+          </div>       
+        </div>
+      </div>
+      <div class="row" id="mars-hemispheres">
+        <div class="page-header">
+          <h2 class="text-center">Mars Hemispheres</h2>
+        </div>
+        <!--for loop of images-->
+        {% for hemisphere in mars.hemisphere_image_url %}
+        <div class="col-md-3">
+          <div class="thumbnail">
+            <img src="{{hemisphere.image_url | default('static/images/error.png', true)}}" alt="...">
+            <div class="caption">
+              <h3>{{hemisphere.title}}</h3>
+            </div>
           </div>
         </div>
+        {% endfor %}
       </div>
     </div>
   </body>
 </html>
-IMPORTANT
